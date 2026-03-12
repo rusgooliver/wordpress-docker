@@ -27,9 +27,5 @@ sudo usermod -aG docker $USER
 docker --version
 docker-compose --version
 
-# скачиваем файл docker-compose.yaml
-wget https://github.com/rusgooliver/wordpress-docker/blob/main/docker-compose.yml ./ -y
-echo "Скачали docker-compose.yaml"
-
 #предложение изменения дефолтовых учетных записей
 echo "Опционально, для безопасности приложения, командой nano docker-compose.yml отредактируйте файл: измените пароль для root и user для mysql_db. После этого для продолжения выполните команду docker-compose up -d"

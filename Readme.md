@@ -8,8 +8,10 @@ cd wordpress-docker
 
 Шаги 2-5 выполни, если у тебя не установлены doсker и docker-compose.
 
-2. Скачай файл со скриптом установки doсker и docker-compose. В противном случае переходи к п.6
-wget https://github.com/rusgooliver/wordpress-docker/blob/main/install.sh ./
+2. Установи wget и скачай файл со скриптом установки необходимых пакетов для docker. 
+sudo apt install wget
+wget https://github.com/rusgooliver/wordpress-docker/blob/main/install.sh
+wget https://github.com/rusgooliver/wordpress-docker/blob/main/docker-compose.yaml
 
 3. Разреши выполняться скрипту
 chmod +x install.sh
@@ -19,7 +21,7 @@ chmod +x install.sh
 
 5. Скрипт предложит исправить дефолтовые логин и пароль для mysql. Сделай это, если требуется.
 
-6. Выполни команду для создания образов и запуска контейнеров
+6. Выполни команду для создания образов и запуска контейнеров, находясь в директории с файлом docker-compose.yaml
 docker-compose up -d
 
 7. Через несколько минут после завершения выполнения команды перейди на web страницу http://localhost:8080
