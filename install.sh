@@ -1,31 +1,27 @@
+  GNU nano 7.2                                                      install.sh                                                                
 #! /bin/bash
 
 # обновим список пакетов
 sudo apt update && sudo apt upgrade -y
 
-#  установим git и зависимости для Docker
-sudo apt install -y curl apt-transport-https ca-certificates software-properties-common
+sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
 
-# установим GPG‑ключ Docker
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# добавим repo Docker
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
 
-# установим Docker
-sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo apt update
 
-# установим Docker Compose:
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-echo "Установили необходимые компоненты"
-
-# добавим пользователя docker
-sudo usermod -aG docker $USER
-
-# проверка установок
-docker --version
-docker-compose --version
-
-#предложение изменения дефолтовых учетных записей
-echo "Опционально, для безопасности приложения, командой nano docker-compose.yml отредактируйте файл: измените пароль для root и user для mysql_db. После этого для продолжения выполните команду docker-compose up -d"
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose -y
